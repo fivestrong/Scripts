@@ -20,16 +20,16 @@ Tip="${Green_font_prefix}[注意]${Font_color_suffix}"
 #安装最新内核源
 install_elrepo() {
     check_version
-    if version 5; then
+    if [[ ${version} = "5" ]]; then
         echo -e "${red}Error:${plain} not supported CentOS 5."
         exit 1
     fi
 
     rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
 
-    if version 6; then
+    if [[ ${version} = "6" ]]; then
         rpm -Uvh http://www.elrepo.org/elrepo-release-6-8.el6.elrepo.noarch.rpm
-    elif version 7; then
+    elif [[ ${version} = "7" ]]; then
         rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
     fi
 
