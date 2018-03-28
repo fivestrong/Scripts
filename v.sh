@@ -326,7 +326,7 @@ web_install(){
 	echo -e "${OK} ${GreenBG} 安装Website伪装站点 ${Font}"
 	sleep 2
 	mkdir /www && cd /www
-	git clone https://github.com/fivestrong/fivestrong.github.io.git
+	git clone https://github.com/fivestrong/fivestrong.github.io.git /www
 	echo -e "${OK} ${GreenBG} Website下载成功 ${Font}"
 
 }
@@ -355,9 +355,7 @@ v2ray_conf_add(){
 	"streamSettings":{
 	  "network":"ws",
 	  "wsSettings": {
-      "connectionReuse": true,
 	  "path": "/serv/"
-	  }
 	  }
 	}
   },
