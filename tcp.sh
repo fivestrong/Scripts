@@ -515,7 +515,7 @@ case "$num" in
 	;;
 	*)
 	clear
-	echo -e "${Error}:请输入正确数字 [0-10]"
+	echo -e "${Error}:请输入正确数字 [0-11]"
 	sleep 5s
 	start_menu
 	;;
@@ -689,7 +689,7 @@ check_sys_Lotsever(){
 
 check_status(){
 	kernel_version=`uname -r | awk -F "-" '{print $1}'`
-	if [[ ${kernel_version} = "4.11.8" || ${kernel_version} -ge "4.9" ]]; then
+	if [[ ${kernel_version} = "4.11.8" || ${kernel_version} > "4.9" ]]; then
 		kernel_status="BBR"
 	elif [[ ${kernel_version} = "3.10.0" || ${kernel_version} = "3.16.0" || ${kernel_version} = "3.2.0" || ${kernel_version} = "4.4.0" || ${kernel_version} = "3.13.0"  || ${kernel_version} = "2.6.32" ]]; then
 		kernel_status="Lotserver"
