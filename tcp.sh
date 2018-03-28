@@ -403,6 +403,7 @@ echo && echo -e " TCP加速 一键安装管理脚本 ${Red_font_prefix}[v${sh_ve
  ${Green_font_prefix}7.${Font_color_suffix} 卸载全部加速
  ${Green_font_prefix}8.${Font_color_suffix} 系统配置优化
  ${Green_font_prefix}9.${Font_color_suffix} 退出脚本
+  ${Green_font_prefix}10.${Font_color_suffix} 升级脚本
 ————————————————————————————————" && echo
 
 	check_status
@@ -445,9 +446,12 @@ case "$num" in
 	9)
 	exit 1
 	;;
+    10)
+	Update_Shell
+	;;
 	*)
 	clear
-	echo -e "${Error}:请输入正确数字 [0-8]"
+	echo -e "${Error}:请输入正确数字 [0-10]"
 	sleep 5s
 	start_menu
 	;;

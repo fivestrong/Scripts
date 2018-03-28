@@ -3,7 +3,7 @@
 #====================================================
 #	System Request:Debian 7+/Ubuntu 14.04+/Centos 6+
 #	Author: wulabing & dylanbai8
-#	Dscription: V2RAY 基于 NGINX 的 VMESS+WS+TLS+Website(Use Path)+Rinetd BBR
+#	Dscription: V2RAY 基于 NGINX 的 VMESS+WS+TLS+Website(Use Path)
 #	Blog: https://www.wulabing.com https://oo0.bid
 #	Official document: www.v2ray.com
 #====================================================
@@ -38,7 +38,7 @@ source /etc/os-release
 v2ray_hello(){
 	clear
 	echo ""
-	echo -e "${Info} ${GreenBG} 你正在执行 V2RAY 基于 NGINX 的 VMESS+WS+TLS+Website(Use Path)+Rinetd BBR 一键安装脚本 ${Font}"
+	echo -e "${Info} ${GreenBG} 你正在执行 V2RAY 基于 NGINX 的 VMESS+WS+TLS+Website(Use Path)一键安装脚本 ${Font}"
 	echo ""
 }
 
@@ -610,10 +610,12 @@ EOF
 
 #重启nginx和v2ray程序 加载配置
 start_process_systemd(){
+	systemctl enable nginx
 	systemctl restart nginx
 	judge "Nginx 启动"
 
-	systemctl start v2ray
+    systemctl enable v2ray
+	systemctl restart v2ray
 	judge "V2ray 启动"
 }
 
@@ -621,7 +623,7 @@ start_process_systemd(){
 show_information(){
 	clear
 	echo ""
-	echo -e "${Info} ${GreenBG} V2RAY 基于 NGINX 的 VMESS+WS+TLS+Website(Use Host)+Rinetd BBR 安装成功 ${Font} "
+	echo -e "${Info} ${GreenBG} V2RAY 基于 NGINX 的 VMESS+WS+TLS+Website(Use Host) 安装成功 ${Font} "
 	echo -e "----------------------------------------------------------"
 	echo -e "${Green} 【您的 V2ray 配置信息】 ${Font} "
 	echo -e "${Green} 地址（address）：${Font} ${domain} "
