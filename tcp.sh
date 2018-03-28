@@ -294,7 +294,7 @@ rinetdbbr_install(){
 	# export RINET_URL="https://drive.google.com/uc?id=0B0D0hDHteoksVzZ4MG5hRkhqYlk"
       export RINET_URL="https://raw.githubusercontent.com/fivestrong/Scripts/master/bbr/rinetd_bbr_powered"
 
-	for CMD in curl iptables grep cut xargs systemctl ip awk
+	for CMD in curl iptables grep cut xargs systemctl ip awk killall
 	do
 		if ! type -p ${CMD} >/dev/null 2>&1; then
 			echo -e "\e[1;31mtool ${CMD} 缺少依赖 Rinetd BBR 终止安装 \e[0m"
@@ -304,6 +304,7 @@ rinetdbbr_install(){
 
 	systemctl disable rinetd-bbr.service
 	systemctl stop rinetd-bbr.service
+    killall -9 rinetd-bbr
 	rm -rf /usr/bin/rinetd-bbr /etc/rinetd-bbr.conf /etc/systemd/system/rinetd-bbr.service
 
 	echo -e "${OK} ${GreenBG} 下载Rinetd-BBR安装文件 ${Font}"
@@ -353,6 +354,7 @@ remove_all(){
 
     systemctl disable rinetd-bbr.service
 	systemctl stop rinetd-bbr.service
+    killall -9 rinetd-bbr
 	rm -rf /usr/bin/rinetd-bbr /etc/rinetd-bbr.conf /etc/systemd/system/rinetd-bbr.service
 
 	clear
