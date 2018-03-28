@@ -296,14 +296,14 @@ rinetdbbr_install(){
 
 	for CMD in curl iptables grep cut xargs systemctl ip awk
 	do
-		if ! type -p ${CMD}; then
+		if ! type -p ${CMD} >/dev/null 2>&1; then
 			echo -e "\e[1;31mtool ${CMD} 缺少依赖 Rinetd BBR 终止安装 \e[0m"
 			exit 1
 		fi
 	done
 
 	systemctl disable rinetd-bbr.service
-	killall -9 rinetd-bbr
+	systemctl stop rinetd-bbr.service
 	rm -rf /usr/bin/rinetd-bbr /etc/rinetd-bbr.conf /etc/systemd/system/rinetd-bbr.service
 
 	echo -e "${OK} ${GreenBG} 下载Rinetd-BBR安装文件 ${Font}"
@@ -352,7 +352,7 @@ remove_all(){
 	fi
 
     systemctl disable rinetd-bbr.service
-	killall -9 rinetd-bbr
+	systemctl stop rinetd-bbr.service
 	rm -rf /usr/bin/rinetd-bbr /etc/rinetd-bbr.conf /etc/systemd/system/rinetd-bbr.service
 
 	clear
@@ -700,7 +700,7 @@ check_sys_Lotsever(){
 
 check_status(){
 	kernel_version=`uname -r | awk -F "-" '{print $1}'`
-	if [[ ${kernel_version} = "4.11.8" ]] || [ ${kernel_version} > "4.9.0" ]; then
+	if [[ ${kernel_version} = "4.11.8" ]] || [ ${kernel_version} \> "4.9.0" ]; then
 		kernel_status="BBR"
 	elif [[ ${kernel_version} = "3.10.0" || ${kernel_version} = "3.16.0" || ${kernel_version} = "3.2.0" || ${kernel_version} = "4.4.0" || ${kernel_version} = "3.13.0"  || ${kernel_version} = "2.6.32" ]]; then
 		kernel_status="Lotserver"
