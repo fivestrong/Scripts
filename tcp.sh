@@ -14,6 +14,14 @@ sh_ver="1.1.3"
 # github="raw.githubusercontent.com/chiakge/Linux-NetSpeed/master"
 github="raw.githubusercontent.com/fivestrong/Scripts/master"
 
+#定义文字颜色
+Green="\033[32m" 
+Red="\033[31m" 
+Yellow="\033[33m"
+GreenBG="\033[42;37m"
+RedBG="\033[41;37m"
+Font="\033[0m"
+
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
 Info="${Green_font_prefix}[信息]${Font_color_suffix}"
 Error="${Red_font_prefix}[错误]${Font_color_suffix}"
@@ -280,6 +288,9 @@ shortRttMS=\"${initialCwndWan}\"">>/appex/etc/config
 
 #安装bbr端口加速
 rinetdbbr_install(){
+    echo -e "${Info} ${GreenBG} 请输入连接端口（默认:443 无特殊需求请直接按回车键） ${Font}"
+	stty erase '^H' && read -p "请输入：" port
+	[[ -z ${port} ]] && port="443"
 	# export RINET_URL="https://drive.google.com/uc?id=0B0D0hDHteoksVzZ4MG5hRkhqYlk"
       export RINET_URL="https://raw.githubusercontent.com/fivestrong/Scripts/master/bbr/rinetd_bbr_powered"
 
@@ -475,7 +486,7 @@ echo && echo -e " TCP加速 一键安装管理脚本 ${Red_font_prefix}[v${sh_ve
 		
 	fi
 echo
-read -p " 请输入数字 [0-10]:" num
+read -p " 请输入数字 [0-11]:" num
 case "$num" in
 	0)
 	installkernel
@@ -689,7 +700,7 @@ check_sys_Lotsever(){
 
 check_status(){
 	kernel_version=`uname -r | awk -F "-" '{print $1}'`
-	if [[ ${kernel_version} = "4.11.8" || ${kernel_version} > "4.9" ]]; then
+	if [[ ${kernel_version} = "4.11.8" ]] || [ ${kernel_version} > "4.9.0" ]; then
 		kernel_status="BBR"
 	elif [[ ${kernel_version} = "3.10.0" || ${kernel_version} = "3.16.0" || ${kernel_version} = "3.2.0" || ${kernel_version} = "4.4.0" || ${kernel_version} = "3.13.0"  || ${kernel_version} = "2.6.32" ]]; then
 		kernel_status="Lotserver"
