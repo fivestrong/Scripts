@@ -61,7 +61,8 @@ get_latest_version() {
 installkernel(){
     if [[ "${release}" == "centos" ]]; then
         install_elrepo
-        yum --enablerepo=elrepo-kernel -y install kernel-ml kernel-ml-devel
+        kernel_version=$(wget -qO- http://elrepo.org/linux/kernel/el7/x86_64/RPMS/ |grep kernel-ml|  awk -F '-' '{ print $3}'| grep [0-9]|sort -V| tail -1)
+        yum --enablerepo=elrepo-kernel -y install kernel-ml kernel-ml-devel kernel-ml-headers
         if [ $? -ne 0 ]; then
             echo -e "${red}Error:${plain} Install latest kernel failed, please check it."
             exit 1
