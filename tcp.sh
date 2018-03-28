@@ -11,7 +11,8 @@ export PATH
 #=================================================
 
 sh_ver="1.1.3"
-github="raw.githubusercontent.com/chiakge/Linux-NetSpeed/master"
+# github="raw.githubusercontent.com/chiakge/Linux-NetSpeed/master"
+github="raw.githubusercontent.com/fivestrong/Scripts/master"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
 Info="${Green_font_prefix}[信息]${Font_color_suffix}"
@@ -277,6 +278,59 @@ shortRttMS=\"${initialCwndWan}\"">>/appex/etc/config
 	start_menu
 }
 
+#安装bbr端口加速
+rinetdbbr_install(){
+	# export RINET_URL="https://drive.google.com/uc?id=0B0D0hDHteoksVzZ4MG5hRkhqYlk"
+      export RINET_URL="https://raw.githubusercontent.com/fivestrong/Scripts/master/bbr/rinetd_bbr_powered"
+
+	for CMD in curl iptables grep cut xargs systemctl ip awk
+	do
+		if ! type -p ${CMD}; then
+			echo -e "\e[1;31mtool ${CMD} 缺少依赖 Rinetd BBR 终止安装 \e[0m"
+			exit 1
+		fi
+	done
+
+	systemctl disable rinetd-bbr.service
+	killall -9 rinetd-bbr
+	rm -rf /usr/bin/rinetd-bbr /etc/rinetd-bbr.conf /etc/systemd/system/rinetd-bbr.service
+
+	echo -e "${OK} ${GreenBG} 下载Rinetd-BBR安装文件 ${Font}"
+	curl -L "${RINET_URL}" >/usr/bin/rinetd-bbr
+	chmod +x /usr/bin/rinetd-bbr
+
+	echo -e "${OK} ${GreenBG} 配置 ${port} 为加速端口 ${Font}"
+	cat <<EOF >> /etc/rinetd-bbr.conf
+0.0.0.0 ${port} 0.0.0.0 ${port}
+EOF
+
+	IFACE=$(ip -4 addr | awk '{if ($1 ~ /inet/ && $NF ~ /^[ve]/) {a=$NF}} END{print a}')
+
+	cat <<EOF > /etc/systemd/system/rinetd-bbr.service
+[Unit]
+Description=rinetd with bbr
+Documentation=https://github.com/linhua55/lkl_study
+
+[Service]
+ExecStart=/usr/bin/rinetd-bbr -f -c /etc/rinetd-bbr.conf raw ${IFACE}
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+	systemctl enable rinetd-bbr.service
+	systemctl start rinetd-bbr.service
+
+	if systemctl status rinetd-bbr >/dev/null; then
+		echo -e "${OK} ${GreenBG} Rinetd-BBR 安装成功 ${Font}"
+		echo -e "${OK} ${GreenBG} ${port} 端口加速成功 ${Font}"
+	else
+		echo -e "${Error} ${RedBG} Rinetd-BBR 安装失败 ${Font}"
+	fi
+}
+
 #卸载全部加速
 remove_all(){
 	sed -i '/net.core.default_qdisc/d' /etc/sysctl.conf
@@ -285,6 +339,11 @@ remove_all(){
 		wget --no-check-certificate -O appex.sh https://raw.githubusercontent.com/0oVicero0/serverSpeeder_Install/master/appex.sh && chmod +x appex.sh && bash appex.sh uninstall
 		rm -f appex.sh
 	fi
+
+    systemctl disable rinetd-bbr.service
+	killall -9 rinetd-bbr
+	rm -rf /usr/bin/rinetd-bbr /etc/rinetd-bbr.conf /etc/systemd/system/rinetd-bbr.service
+
 	clear
 	echo -e "${Info}:清除加速完成。"
 	sleep 1s
@@ -399,11 +458,13 @@ echo && echo -e " TCP加速 一键安装管理脚本 ${Red_font_prefix}[v${sh_ve
  ${Green_font_prefix}4.${Font_color_suffix} 使用BBR魔改版加速
  ${Green_font_prefix}5.${Font_color_suffix} 使用暴力BBR魔改版加速(不支持部分系统)
  ${Green_font_prefix}6.${Font_color_suffix} 使用Lotserver(锐速)加速
+ ${Green_font_prefix}7.${Font_color_suffix} 使用Rinetd BBR加速(支持openvz)
 ————————————杂项管理————————————
- ${Green_font_prefix}7.${Font_color_suffix} 卸载全部加速
- ${Green_font_prefix}8.${Font_color_suffix} 系统配置优化
- ${Green_font_prefix}9.${Font_color_suffix} 退出脚本
-  ${Green_font_prefix}10.${Font_color_suffix} 升级脚本
+ ${Green_font_prefix}8.${Font_color_suffix} 卸载全部加速
+ ${Green_font_prefix}9.${Font_color_suffix} 系统配置优化
+ ${Green_font_prefix}10.${Font_color_suffix} 升级脚本
+ ${Green_font_prefix}11.${Font_color_suffix} 退出脚本
+  
 ————————————————————————————————" && echo
 
 	check_status
@@ -414,7 +475,7 @@ echo && echo -e " TCP加速 一键安装管理脚本 ${Red_font_prefix}[v${sh_ve
 		
 	fi
 echo
-read -p " 请输入数字 [0-9]:" num
+read -p " 请输入数字 [0-10]:" num
 case "$num" in
 	0)
 	installkernel
@@ -437,17 +498,20 @@ case "$num" in
 	6)
 	startlotserver
 	;;
-	7)
-	remove_all
+    7)
+	rinetdbbr_install
 	;;
 	8)
-	optimizing_system
+	remove_all
 	;;
 	9)
-	exit 1
+	optimizing_system
 	;;
-    10)
-	Update_Shell
+	10)
+    Update_Shell
+	;;
+    11)
+	exit 1
 	;;
 	*)
 	clear
@@ -625,7 +689,7 @@ check_sys_Lotsever(){
 
 check_status(){
 	kernel_version=`uname -r | awk -F "-" '{print $1}'`
-	if [[ ${kernel_version} = "4.11.8" ]]; then
+	if [[ ${kernel_version} = "4.11.8" || ${kernel_version} -ge "4.9" ]]; then
 		kernel_status="BBR"
 	elif [[ ${kernel_version} = "3.10.0" || ${kernel_version} = "3.16.0" || ${kernel_version} = "3.2.0" || ${kernel_version} = "4.4.0" || ${kernel_version} = "3.13.0"  || ${kernel_version} = "2.6.32" ]]; then
 		kernel_status="Lotserver"
