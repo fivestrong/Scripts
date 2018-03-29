@@ -286,8 +286,9 @@ shortRttMS=\"${initialCwndWan}\"">>/appex/etc/config
 	start_menu
 }
 
-#安装bbr端口加速
+#安装Rinetd bbr端口加速
 rinetdbbr_install(){
+	remove_all
     echo -e "${Info} ${GreenBG} 请输入连接端口（默认:443 无特殊需求请直接按回车键） ${Font}"
 	stty erase '^H' && read -p "请输入：" port
 	[[ -z ${port} ]] && port="443"
@@ -540,7 +541,7 @@ esac
 detele_kernel(){
 	if [[ "${release}" == "centos" ]]; then
 		rpm_total=`rpm -qa | grep kernel | grep -v "${kernel_version}" | grep -v "noarch" | wc -l`
-		if [ "${rpm_total}" > "1" ]; then
+		if [ "${rpm_total}" \> "1" ]; then
 			echo -e "检测到 ${rpm_total} 个其余内核，开始卸载..."
 			for((integer = 1; integer <= ${rpm_total}; integer++)); do
 				rpm_del=`rpm -qa | grep kernel | grep -v "${kernel_version}" | grep -v "noarch" | head -${integer}`
@@ -743,6 +744,13 @@ check_status(){
 				run_status="暴力BBR魔改版启动成功"
 			else 
 				run_status="暴力BBR魔改版启动失败"
+			fi
+		elif [ -e /etc/rinetd-bbr.conf ]; then
+			run_status=`ps -ef | grep rinetd-bbr | grep -v grep | awk -F " " '{print $8}' | awk -F "/" '{print $4}'`
+			if [[ ${run_status} == "rinetd-bbr" ]]; then
+				run_status="Rinetd BBR启动成功"
+			else 
+				run_status="Rinetd BBR启动失败"
 			fi
 		else 
 			run_status="未安装加速模块"
