@@ -703,7 +703,7 @@ check_sys_Lotsever(){
 check_status(){
 	function version_ge() { test "$(echo "$@" | tr " " "\n" | sort -rV | head -n 1)" == "$1"; }
 	kernel_version=`uname -r | awk -F "-" '{print $1}'`
-	if [[ ${kernel_version} = "4.11.8" ]] || [ version_ge ${kernel_version} "4.9.0" ]; then
+	if [[ ${kernel_version} = "4.11.8" ]] || version_ge ${kernel_version} "4.9.0" ; then
 		kernel_status="BBR"
 	elif [[ ${kernel_version} = "3.10.0" || ${kernel_version} = "3.16.0" || ${kernel_version} = "3.2.0" || ${kernel_version} = "4.4.0" || ${kernel_version} = "3.13.0"  || ${kernel_version} = "2.6.32" ]]; then
 		kernel_status="Lotserver"
