@@ -5,13 +5,12 @@ export PATH
 #=================================================
 #	System Required: CentOS 6+,Debian7+,Ubuntu12+
 #	Description: 内核升级+BBR+BBR魔改版+Lotserver
-#	Version: 1.1.3
+#	Version: 1.1.4
 #	Author: 千影,Clarence
 #	Blog: https://www.94ish.me/ https://linuxfunk.com
 #=================================================
 
-sh_ver="1.1.3"
-# github="raw.githubusercontent.com/chiakge/Linux-NetSpeed/master"
+sh_ver="1.1.4"
 github="raw.githubusercontent.com/fivestrong/Scripts/master"
 
 #定义文字颜色
@@ -292,7 +291,6 @@ rinetdbbr_install(){
     echo -e "${Info} ${GreenBG} 请输入连接端口（默认:443 无特殊需求请直接按回车键） ${Font}"
 	stty erase '^H' && read -p "请输入：" port
 	[[ -z ${port} ]] && port="443"
-	# export RINET_URL="https://drive.google.com/uc?id=0B0D0hDHteoksVzZ4MG5hRkhqYlk"
       export RINET_URL="https://raw.githubusercontent.com/fivestrong/Scripts/master/bbr/rinetd_bbr_powered"
 
 	for CMD in curl iptables grep cut xargs systemctl ip awk killall
@@ -463,19 +461,19 @@ clear
 echo && echo -e " TCP加速 一键安装管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_suffix}
 
   
- ${Green_font_prefix}0.${Font_color_suffix} 升级最新内核(只支持官方BBR)
+ ${Green_font_prefix}0.${Font_color_suffix}  升级最新内核(只支持官方BBR)
 ————————————内核管理————————————
- ${Green_font_prefix}1.${Font_color_suffix} 安装 BBR/BBR魔改版内核
- ${Green_font_prefix}2.${Font_color_suffix} 安装 Lotserver(锐速)内核
+ ${Green_font_prefix}1.${Font_color_suffix}  安装 BBR/BBR魔改版内核
+ ${Green_font_prefix}2.${Font_color_suffix}  安装 Lotserver(锐速)内核
 ————————————加速管理————————————
- ${Green_font_prefix}3.${Font_color_suffix} 使用BBR加速
- ${Green_font_prefix}4.${Font_color_suffix} 使用BBR魔改版加速
- ${Green_font_prefix}5.${Font_color_suffix} 使用暴力BBR魔改版加速(不支持部分系统)
- ${Green_font_prefix}6.${Font_color_suffix} 使用Lotserver(锐速)加速
- ${Green_font_prefix}7.${Font_color_suffix} 使用Rinetd BBR加速(支持openvz)
+ ${Green_font_prefix}3.${Font_color_suffix}  使用BBR加速
+ ${Green_font_prefix}4.${Font_color_suffix}  使用BBR魔改版加速
+ ${Green_font_prefix}5.${Font_color_suffix}  使用暴力BBR魔改版加速(不支持部分系统)
+ ${Green_font_prefix}6.${Font_color_suffix}  使用Lotserver(锐速)加速
+ ${Green_font_prefix}7.${Font_color_suffix}  使用Rinetd BBR加速(支持openvz)
 ————————————杂项管理————————————
- ${Green_font_prefix}8.${Font_color_suffix} 卸载全部加速
- ${Green_font_prefix}9.${Font_color_suffix} 系统配置优化
+ ${Green_font_prefix}8.${Font_color_suffix}  卸载全部加速
+ ${Green_font_prefix}9.${Font_color_suffix}  系统配置优化
  ${Green_font_prefix}10.${Font_color_suffix} 升级脚本
  ${Green_font_prefix}11.${Font_color_suffix} 退出脚本
   
