@@ -7,3 +7,9 @@ wget -N https://raw.githubusercontent.com/fivestrong/Scripts/master/v.sh && bash
 ```shell
 wget -N https://raw.githubusercontent.com/fivestrong/Scripts/master/tcp.sh && bash tcp.sh
 ```
+3.Parted分区T级别硬盘为xfs格式脚本
+```shell
+wget  https://raw.githubusercontent.com/fivestrong/Scripts/master/date_parted.sh
+
+请根据服务器实际硬盘编号更改脚本，否则可能会丢失数据。
+```
