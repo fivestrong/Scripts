@@ -13,3 +13,9 @@ wget  https://raw.githubusercontent.com/fivestrong/Scripts/master/date_parted.sh
 
 请根据服务器实际硬盘编号更改脚本，否则可能会丢失数据。
 ```
+3.mysql 定时备份并传到远端服务器脚本
+```shell
+wget  https://raw.githubusercontent.com/fivestrong/Scripts/master/sql-backup.sh
+
+修改脚本中配置，以适应个人环境。
+```
